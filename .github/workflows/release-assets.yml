@@ -24,7 +24,21 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
+      - name: Set Version Variable
+        id: set_vars
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "VERSION=${{ inputs.tag_name }}" >> $GITHUB_ENV
+          else
+            echo "VERSION=${{ github.ref_name }}" >> $GITHUB_ENV
+          fi
 
+      # 之后的所有步骤都可以直接使用 ${{ env.VERSION }}
+      - name: Build and Release
+        run: |
+          echo "正在构建版本: ${{ env.VERSION }}"
+          # 你的构建命令，例如: npm run build -- --version=${{ env.VERSION }}
+          
       - name: Package Source Code
         run: |
           # --- 自定义配置区域 ---
