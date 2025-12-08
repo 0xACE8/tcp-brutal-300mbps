@@ -1,10 +1,18 @@
-name: Generate Release Assets
+name: Release Assets
 
 on:
+  # 保留 tags 触发（可选，如果你还想保留自动触发的话）
   push:
     tags:
-      - 'v*' # 监听 v1.0.3 这种标签
+      - 'v*'
+  
+  # 新增：手动触发
   workflow_dispatch:
+    inputs:
+      tag_name:
+        description: '版本号/Tag (例如 v1.0.3)'
+        required: true
+        default: 'v1.0.3'
 
 permissions:
   contents: write
