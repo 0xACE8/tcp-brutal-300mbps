@@ -1,0 +1,68 @@
+name: Generate Release Assets
+
+on:
+  push:
+    tags:
+      - 'v*' # 监听 v1.0.3 这种标签
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: Create Custom Release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Package Source Code
+        run: |
+          # --- 自定义配置区域 ---
+          # 强制指定包名为 tcp-brutal-300Mbps，避免与原版冲突
+          CUSTOM_PKG_NAME="tcp-brutal-300Mbps"
+          
+          # 从 Tag 获取版本号 (例如 v1.0.3 -> 1.0.3)
+          if [[ $GITHUB_REF_TYPE == 'tag' ]]; then
+            VERSION=${GITHUB_REF#refs/tags/v}
+          else
+            # 如果是手动触发，默认给个版本号
+            VERSION="1.0.3"
+          fi
+          
+          # 最终的目录名: tcp-brutal-300Mbps-1.0.3
+          DIR_NAME="${CUSTOM_PKG_NAME}-${VERSION}"
+          
+          echo "Packaging source into: $DIR_NAME"
+          
+          # 1. 创建符合 OpenWrt 标准的目录结构
+          mkdir -p dist/$DIR_NAME
+          
+          # 2. 复制源码 (排除无关文件)
+          rsync -av --exclude='.git' --exclude='.github' --exclude='dist' . dist/$DIR_NAME/
+          
+          # 3. 进入 dist 目录进行打包
+          cd dist
+          
+          # 打包为 tar.gz
+          tar -czvf ${DIR_NAME}.tar.gz $DIR_NAME
+          
+          # 打包为 zip (可选)
+          zip -r ${DIR_NAME}.zip $DIR_NAME
+          
+          # 4. 导出变量供上传步骤使用
+          echo "ASSET_TAR=dist/${DIR_NAME}.tar.gz" >> $GITHUB_ENV
+          echo "ASSET_ZIP=dist/${DIR_NAME}.zip" >> $GITHUB_ENV
+          echo "RELEASE_NAME=${CUSTOM_PKG_NAME}-v${VERSION}" >> $GITHUB_ENV
+
+      - name: Create Release and Upload Assets
+        uses: softprops/action-gh-release@v1
+        with:
+          # Release 的标题和 Tag 可以保持 v1.0.3，不影响内部文件名
+          name: ${{ env.RELEASE_NAME }}
+          draft: false
+          prerelease: false
+          files: |
+            ${{ env.ASSET_TAR }}
+            ${{ env.ASSET_ZIP }}
