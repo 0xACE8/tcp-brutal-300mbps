@@ -18,7 +18,10 @@ rm -rf $1
 }
 
 ## kernel Tcp-Brutal
-git clone --depth 1 https://github.com/apernet/tcp-brutal tb && mv -n tb/* ./; rm -rf tb
+git clone --depth 1 https://github.com/apernet/tcp-brutal tb300 && mv -n tb300/* ./; rm -rf tb300
 
+## 300Mbps
+sed -i 's/INIT_PACING_RATE 125000/INIT_PACING_RATE 45000000/g' brutal.c
+sed -i 's/INIT_CWND_GAIN 20/INIT_CWND_GAIN 30/g' brutal.c
 
 exit 0
