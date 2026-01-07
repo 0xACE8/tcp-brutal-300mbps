@@ -1,1 +1,1 @@
-# tcp-brutal-mod
+# tcp-brutal-300mbps
