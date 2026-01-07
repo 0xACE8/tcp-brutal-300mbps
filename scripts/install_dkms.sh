@@ -19,11 +19,11 @@ SCRIPT_ARGS=("$@")
 
 # Initial URL & command of one-click script (for usage & logging)
 # TODO: change the link to real
-SCRIPT_INITIATOR_URL="https://tcp.hy2.sh"
+SCRIPT_INITIATOR_URL="https://raw.githubusercontent.com/0xACE8/tcp-brutal-300mbps/refs/heads/main/scripts/install_dkms.sh"
 SCRIPT_INITIATOR_COMMAND="bash <(curl -fsSL $SCRIPT_INITIATOR_URL)"
 
 # URL of GitHub
-REPO_URL="https://github.com/apernet/tcp-brutal"
+REPO_URL="https://github.com/0xACE8/tcp-brutal-300mbps"
 
 # URL of Hysteria 2 API
 HY2_API_BASE_URL="https://api.hy2.io/v1"
@@ -33,8 +33,8 @@ HY2_API_BASE_URL="https://api.hy2.io/v1"
 # export ALL_PROXY=socks5h://192.0.2.1:1080
 CURL_FLAGS=(-L -f -q --retry 5 --retry-delay 10 --retry-max-time 60)
 
-DKMS_MODULE_NAME="tcp-brutal"
-KERNEL_MODULE_NAME="brutal"
+DKMS_MODULE_NAME="tcp-brutal-300mbps"
+KERNEL_MODULE_NAME="tcp-brutal-300mbps"
 
 
 ###
