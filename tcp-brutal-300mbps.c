@@ -11,7 +11,7 @@
  and your kernel version is greater than 5.8.
 #endif
 
-#define INIT_PACING_RATE 37500000 // 37,500,000 Bytes/s = 300 Mbps 
+#define INIT_PACING_RATE 45000000 // 45,000,000 Bytes/s = 360 Mbps (300Mbpsブロードバンドに最適な推奨パケット送信速度)
 #define INIT_CWND_GAIN 30
 
 #define MIN_PACING_RATE 62500 // 500 Kbps
